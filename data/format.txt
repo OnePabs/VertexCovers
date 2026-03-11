@@ -1,0 +1,24 @@
+Each graph should be stored in its own folder with two files
+1. A file called nodes.csv containing a header called nodes 
+    and each node as a row 
+2. A file called edges.csv containing the headers node1, node2 and each edge as 
+    a row
+
+
+Example nodes file (3 nodes with edges between each node)
+
+folder: 3_node_circular_graph
+
+filename: nodes.csv
+file content:
+nodes
+1
+2
+3
+
+filename: edges.csv
+file content:
+node1,node2
+1,2
+2,3
+3,1
