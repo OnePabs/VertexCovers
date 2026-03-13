@@ -2,6 +2,7 @@ from graph import Graph, load_graph
 from algorithms.exact_solutions.exhaustive import exhaustive_search
 from algorithms.approximations.maximal_matching import maximal_matching_search
 from algorithms.approximations.pitt_randomized import pitt_randomized_search
+from algorithms.approximations.relaxed_lp import relaxed_lp_search
 from pathlib import Path
 
 
@@ -42,5 +43,16 @@ print('Vertex Cover Size: ' + str(cover_size))
 print('Cover: ')
 print(cover)
 print()
+
+#Relaxed LP approximation
+res = relaxed_lp_search(g)
+cover_size = res[0]
+cover = res[1]
+print('Result of Relaxed LP Search: ')
+print('Vertex Cover Size: ' + str(cover_size))
+print('Cover: ')
+print(cover)
+print()
+
 
 
