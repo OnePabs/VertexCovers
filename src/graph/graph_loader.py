@@ -2,10 +2,10 @@ import pandas as pd
 from graph import Graph
 
 def load_graph(nodes_filepath, edges_filepath):
-    nodes_df = pd.read_csv(nodes_filepath)
+    nodes_df = pd.read_csv(nodes_filepath, dtype={'nodes': 'string'})
     nodes = nodes_df['nodes'].tolist()
 
-    edges_df = pd.read_csv(edges_filepath)
+    edges_df = pd.read_csv(edges_filepath, dtype=pd.StringDtype())
     num_edges = len(edges_df)
     nodes_1 = edges_df['node1'].tolist()
     nodes_2 = edges_df['node2'].tolist()
