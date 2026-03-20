@@ -8,12 +8,10 @@
 ###
 def maximal_matching_search(graph):
     cover = set()
-    for edge in graph.edges:
-        node1 = edge[0]
-        node2 = edge[1]
-        if (not (node1 in cover)) and (not (node2 in cover)):
-            cover.update([node1,node2])
-    cover = list(cover)
+    # Go through each edge. If it not already covered add both edge nodes to the cover
+    for edge in graph.get_edges():
+        if not any(edge_node_name in cover for edge_node_name in edge.get_node_names()):
+            cover.update(edge.get_node_names())
     size = len(cover)
     return (size, cover)
 

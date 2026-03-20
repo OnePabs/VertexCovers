@@ -10,15 +10,11 @@ import random
 def pitt_randomized_search(graph, seed = 0):
     random.seed(seed) 
     cover = set()
-    for edge in graph.edges:
-        node1 = edge[0]
-        node2 = edge[1]
-        if (not (node1 in cover)) and (not (node2 in cover)):
-            # randomly choose between node 1 and node 2
-            choices = [node1, node2]
+    for edge in graph.get_edges():
+        if not any(edge_node_name in cover for edge_node_name in edge.get_node_names()):
+            choices = list(edge.get_node_names())
             choice = random.choice(choices)
             cover.add(choice)
-    cover = list(cover)
     size = len(cover)
     return (size, cover)
 

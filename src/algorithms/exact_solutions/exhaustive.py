@@ -9,8 +9,8 @@ def exhaustive_search(graph):
     
     # Get all subsets of graph nodes
     all_nodes_subsets = []
-    for  r in range(len(graph.nodes) + 1):
-        subset = itertools.combinations(graph.nodes, r)
+    for r in range(graph.get_num_nodes() + 1):
+        subset = itertools.combinations(graph.get_node_names(), r)
         all_nodes_subsets.append(subset)
     all_nodes_subsets = list(itertools.chain.from_iterable(all_nodes_subsets))
     
@@ -18,19 +18,12 @@ def exhaustive_search(graph):
     covers = []
     for nodes_subset in all_nodes_subsets:
         is_cover = True
-        for edge in graph.edges:
-            is_either_edge_node_in_subset = False
-            for edge_node in edge:
-                for node in nodes_subset:
-                    if node == edge_node:
-                        is_either_edge_node_in_subset = True
-                        break
-                if is_either_edge_node_in_subset:
-                    break
-            
-            if not is_either_edge_node_in_subset:
+        # Check each edge to see if at least one node in the edge is in the nodes_subset
+        for edge in graph.get_edges():
+            if not any(edge_node_name in nodes_subset for edge_node_name in edge.get_node_names()):
+                # Edge is not covered
                 is_cover = False
-                break
+                break 
         if is_cover:
             size = len(nodes_subset)
             covers.append((size, nodes_subset))

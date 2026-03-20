@@ -1,5 +1,5 @@
 import pandas as pd
-from graph import Graph
+from graph_tools.graph import Graph
 
 def load_graph(nodes_filepath, edges_filepath):
     nodes_df = pd.read_csv(nodes_filepath, dtype={'nodes': 'string'})

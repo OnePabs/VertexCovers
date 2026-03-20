@@ -14,18 +14,19 @@ def relaxed_lp_search(graph, verbose=True):
 
 
     # Define Decision Variables (continuous between 0.0 and 1.0)
-    x = {name: lp.LpVariable(name, lowBound=0.0, upBound=1.0, cat=lp.LpContinuous) for name in graph.get_nodes()}
+    x = {name: lp.LpVariable(name, lowBound=0.0, upBound=1.0, cat=lp.LpContinuous) for name in graph.get_node_names()}
     
-    #lp.LpVariable.dicts("x", graph.get_nodes(), lowBound=0.0, upBound=1.0, cat=lp.LpContinuous)
+    #lp.LpVariable.dicts("x", graph.get_node_names(), lowBound=0.0, upBound=1.0, cat=lp.LpContinuous)
 
     # Define Objective Function:
     # Minimize the sum of selected vertices
-    prob += lp.lpSum([x[v] for v in graph.get_nodes()]), "Total_Weight_of_Vertex_Cover"
+    prob += lp.lpSum([x[v] for v in graph.get_node_names()]), "Total_Weight_of_Vertex_Cover"
 
     # Define Constraints:
     # For every edge (u, v), the sum of their variables must be >= 1
-    for u, v in graph.get_edges():
-        prob += x[u] + x[v] >= 1, f"Edge_Cover_{u}_{v}"
+    for edge in graph.get_edges():
+        edge_node_names = list(edge.get_node_names())
+        prob += x[edge_node_names[0]] + x[edge_node_names[1]] >= 1, f"Edge_Cover_{edge_node_names[0]}_{edge_node_names[1]}"
 
     # Solve Model
     lp.LpSolverDefault.msg = 0
