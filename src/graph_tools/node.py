@@ -3,10 +3,14 @@ class Node:
 
     ### Constructor
     # node_name: String denoting the node name
+    # neighbor_names: Iterable of Strings representing the node's neighbors names
     ###
     def __init__(self, node_name, neighbor_names = None):
-        self.node_name = node_name
-        self.neighbor_names = neighbor_names
+        self._node_name = node_name 
+        self._neighbor_names = set()
+        if not neighbor_names is None:
+            self.add_neighbors(neighbor_names)
+        
 
     ###
     # get_name(self)
@@ -14,27 +18,59 @@ class Node:
     # returns: String node name
     ###
     def get_name(self):
-        return self.node_name
+        return self._node_name
 
 
+    ### 
+    # add_neighbor(neighbor_name, throw_exception_if_already_exists)
+    # Adds a neighbor to the node. An exception is raised when neighbor_name is already a neighbor of this node
+    # Parameters
+    #       neighbor_name: String representing the name of the neighbor node to be added
     ###
-    # set_neighbours(self, neighbor_names)
-    # stores the neighbors of the node instance 
-    # neighbor_names: a set of Strings, each string representing a neighbor name.
+    def add_neighbor(self, neighbor_name):
+        if not isinstance(neighbor_name, str):
+            raise Exception("Node add_neighbor(neighbor_name): neighbor name is not Strings.")
+        if neighbor_name in self._neighbor_names:
+            raise Exception("Node add_neighbor(neighbor_name): " + neighbor_name + " is already a neighbor of node" + self.get_name() + ".")
+        self._neighbor_names.add(neighbor_name)
+
+    ### 
+    # add_neighbors(neighbor_name, throw_exception_if_already_exists)
+    # Adds neighbors to the node. An exception is raised when neighbor_name is already a neighbor of this node
+    # Parameters
+    #       neighbor_names: Iterable of Strings representing the names of the neighbors of this node that are to be added
     ###
-    def set_neighbours(self, neighbor_names):
-        self.neighbor_names = neighbor_names
+    def add_neighbors(self, neighbor_names):
+        for neighbor_name in neighbor_names:
+            self.add_neighbor(neighbor_name)
+
+    ###
+    # remove_neighbor(neighbor_name)
+    # removes the neighbor neighbor_name from the node's neighbors
+    ###
+    def remove_neighbor(self, neighbor_name):
+        # check if neighbor_name is one of the neighbors
+        if not neighbor_name in self._neighbor_names:
+            raise Exception("Node does not have a neighbor called " + neighbor_name)
+        # remove neighbor
+        self._neighbor_names.remove(neighbor_name)
 
 
     ### 
     # get_neighbours(self)
     # gets the names of the neighbors of the node instance
     # 
-    def get_neighbours(self):
-        if self.neighbor_names is None:
+    def get_neighbour_names(self):
+        if self._neighbor_names is None:
             raise Exception("Node Neighbors have not been set.")
-        return self.neighbor_names
+        return self._neighbor_names
     
+    ###
+    # clear_neighbour_names()
+    # Removes all neighbors of this node
+    ###
+    def clear_neighbour_names(self):
+        self._neighbor_names.clear()
 
     ###
     # __eq__(self, other)
@@ -44,7 +80,7 @@ class Node:
     ###
     def __eq__(self, other):
         if isinstance(other,Node):
-            return self.node_name == other.node_name
+            return self._node_name == other._node_name
         return False
     
     ###

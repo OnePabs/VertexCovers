@@ -17,6 +17,7 @@ class Graph:
         self._nodes = {}
         self.edges = []
         if not node_names is None and not edges is None:
+            # Set this graphs nodes and edges using the function parameters
             # Ensure node_names is an enumerable of Strings
             if not all(isinstance(item, str) for item in node_names):
                 raise Exception("Graph Constructor: Not all node names are strings.")
@@ -37,7 +38,8 @@ class Graph:
             for edge in edges:
                 my_iterator = iter(edge)
                 self.add_edge(next(my_iterator), next(my_iterator))
-            
+        # Compute Neighbors
+        self.compute_neighbors() 
 
     ###
     # get_node_names(self)
@@ -98,6 +100,9 @@ class Graph:
             raise Exception("Graph add_edge(" + node1_name + "," + node2_name + "): Edge already exists.")
         #add edge to graph edges
         self.edges.append(new_edge)
+        # update neighbors of nodes in the edge
+        self._nodes[node1_name].add_neighbor(node2_name)
+        self._nodes[node2_name].add_neighbor(node1_name)
         return 
     
 
@@ -110,13 +115,20 @@ class Graph:
     def remove_node(self, node_name):
         if not node_name in self._nodes:
             raise Exception("Graph remove_node(node_name): node_name not in the graph.")
+        # update neighbors
+        for edge in self.edges:
+            if node_name in edge.get_node_names():
+                # at least one of the edge nodes needs to be updated
+                for edge_node_name in edge.get_node_names():
+                    if node_name in self._nodes[edge_node_name].get_neighbour_names():
+                        # edge node needs its neighbors to be updated
+                        self._nodes[edge_node_name].remove_neighbor(node_name)
         # delete all edges with node node_name
         for i in range(len(self.edges) - 1, -1, -1):
             if self.edges[i].is_node_in_edge(node_name):
                 del self.edges[i]
         # delete the node
         del self._nodes[node_name]
-
 
     ###
     # print_structure()
@@ -131,5 +143,21 @@ class Graph:
         for edge in self.edges:
             edges_names.append(edge.get_name())
         print(edges_names)
+        print("node neighbors")
+        for node in self._nodes.values():
+            print("node " + node.get_name() + " neighbors: " + str(node.get_neighbour_names()))
 
+    ###
+    # compute_neighbors()
+    # Computes and sets the neighbors of all the nodes in the graph. 
+    ###
+    def compute_neighbors(self):
+        # clear all node neighbors
+        for node in self._nodes.values():
+            node.clear_neighbour_names()
+        # compute all node neighbors
+        for edge in self.edges:
+            edge_node_names = list(edge.get_node_names())
+            self._nodes[edge_node_names[0]].add_neighbor(edge_node_names[1])
+            self._nodes[edge_node_names[1]].add_neighbor(edge_node_names[0])
 
