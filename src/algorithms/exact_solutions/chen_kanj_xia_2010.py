@@ -64,16 +64,58 @@ def struction(graph, node_name, name_separator = "-"):
     for v in node_and_neighbor_names:
         graph.remove_node(v)
     
-
-
-
+###
+# struction_create_new_node_name(node1_name, node2_name, name_separator)
+# Used in the struction operation to create a new name using node1_name
+# and node2_name listed alphabetically and separated by name_separator
+###
 def struction_create_new_node_name(node1_name, node2_name, name_separator):
     sorted_strings = sorted([node1_name, node2_name])
     return sorted_strings[0] + name_separator + sorted_strings[1]
 
 
+###
+# general_folding(graph, node_name, new_name_suffix = "gfn")
+# Graph operation general folding as described in Lemma 2.4 
+# in Chen, Kanj, and Xia 's 2010 paper. Not to be confused with 
+# the paper's General-Fold function. 
+# Parameters
+#       graph: object of type src/graph_tools/graph Graph
+#       I:     Non-empty list of Strings.  Represents the node names of a non-empty 
+#              Independent set in the graph. 
+#       name_separator: String. A new node is created during the General Fold operation.
+#                        The name of this new node is prefix + name_separator.join(sorted(I))
+#       prefix: String. A new node is created during the General Fold operation.
+#                        The name of this new node is prefix + name_separator.join(sorted(I))
+###
+def general_folding(graph, I, name_separator = ".", prefix="gf."):
 
+    # get the name of all neighbors of all nodes in I
+    I_neighbor_names = set()
+    for node_name in I:
+        node = graph.get_node(node_name)
+        I_neighbor_names.update(node.get_neighbour_names())
 
+    # get I union N(I)
+    I_union_N_I = I_neighbor_names.union(I)
+
+    # Create the new node name
+    new_node_name = prefix + name_separator.join(sorted(I))
+
+    # Add the new node name to the graph
+    graph.add_node(new_node_name)
+
+    # Add edges to the new node
+    for node_name in graph.get_node_names():
+        if not node_name in I_union_N_I:
+            node = graph.get_node(node_name)
+            if any(node_neighbor in I_neighbor_names for node_neighbor in node.get_neighbour_names()):
+                # add edge (node,new_node)
+                graph.add_edge(node_name,new_node_name)
+    
+    # Remove nodes I union N(I) from the graph
+    for node_name in I_union_N_I:
+        graph.remove_node(node_name)
 
 
 
