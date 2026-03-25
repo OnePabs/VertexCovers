@@ -41,6 +41,13 @@ class Graph:
         # Compute Neighbors
         self.compute_neighbors() 
 
+
+
+    #######################
+    #### NODE FUNCTIONS ###
+    #######################
+
+
     ###
     # get_node_names(self)
     # returns a set of all node names of this graph
@@ -48,13 +55,16 @@ class Graph:
     def get_node_names(self):
         return self._nodes.keys()
 
+    ###
+    # get_node(node_name)
+    # Returns the Node object identified by node_name
+    # Raises Error if node_name is not in the graphs nodes
+    ###
+    def get_node(self, node_name):
+        if not node_name in self._nodes:
+            raise Exception("Graph get_node(node_name): node_name was not found as a node in the graph")
+        return self._nodes[node_name]
 
-    ###
-    # get_edges(self)
-    # Retturns the graph edges dictionary "edge name": Edge(node1_name, node2_name)
-    ###
-    def get_edges(self):
-        return self.edges
 
 
     ###
@@ -77,6 +87,51 @@ class Graph:
     # Returns the number of nodes in the graph
     def get_num_nodes(self):
         return len(self._nodes)
+
+    ###
+    # remove_node(self, node_name)
+    # Removes the node node_name and any edge containing it form the graph
+    # Parameters
+    #   node_name: The name of the node to be removed. 
+    ###
+    def remove_node(self, node_name):
+        if not node_name in self._nodes:
+            raise Exception("Graph remove_node(node_name): node_name not in the graph.")
+        # update neighbors
+        for edge in self.edges:
+            if node_name in edge.get_node_names():
+                # at least one of the edge nodes needs to be updated
+                for edge_node_name in edge.get_node_names():
+                    if node_name in self._nodes[edge_node_name].get_neighbour_names():
+                        # edge node needs its neighbors to be updated
+                        self._nodes[edge_node_name].remove_neighbor(node_name)
+        # delete all edges with node node_name
+        for i in range(len(self.edges) - 1, -1, -1):
+            if self.edges[i].is_node_in_edge(node_name):
+                del self.edges[i]
+        # delete the node
+        del self._nodes[node_name]
+
+
+
+    #######################
+    #### EDGE FUNCTIONS ###
+    #######################
+
+    ###
+    # get_edges(self)
+    # Retturns the graph edges list
+    ###
+    def get_edges(self):
+        return self.edges
+
+    ###
+    # get_edges_names()
+    # Returns an list of Strings representing the edge names
+    ###
+    def get_edges_names(self):
+        edge_names = [edge.get_name() for edge in self.edges]
+        return edge_names
 
     ###
     # add_edge(self, node)
@@ -105,30 +160,19 @@ class Graph:
         self._nodes[node2_name].add_neighbor(node1_name)
         return 
     
+    ###
+    # is_edge_in_graph(node1_name, node2_name)
+    # 
+    ###
+    def is_edge_in_graph(self, node1_name, node2_name):
+        edge_name = Edge.create_edge_name(node1_name, node2_name)
+        return any(edge.get_name() == edge_name for edge in self.edges)
 
-    ###
-    # remove_node(self, node_name)
-    # Removes the node node_name and any edge containing it form the graph
-    # Parameters
-    #   node_name: The name of the node to be removed. 
-    ###
-    def remove_node(self, node_name):
-        if not node_name in self._nodes:
-            raise Exception("Graph remove_node(node_name): node_name not in the graph.")
-        # update neighbors
-        for edge in self.edges:
-            if node_name in edge.get_node_names():
-                # at least one of the edge nodes needs to be updated
-                for edge_node_name in edge.get_node_names():
-                    if node_name in self._nodes[edge_node_name].get_neighbour_names():
-                        # edge node needs its neighbors to be updated
-                        self._nodes[edge_node_name].remove_neighbor(node_name)
-        # delete all edges with node node_name
-        for i in range(len(self.edges) - 1, -1, -1):
-            if self.edges[i].is_node_in_edge(node_name):
-                del self.edges[i]
-        # delete the node
-        del self._nodes[node_name]
+
+    #####################
+    #### Miscelaneous ###
+    #####################
+
 
     ###
     # print_structure()

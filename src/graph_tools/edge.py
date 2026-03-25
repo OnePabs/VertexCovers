@@ -9,8 +9,7 @@ class Edge:
     ###
     def __init__(self, node1, node2):
         self.nodes = {node1.get_name():node1, node2.get_name():node1}
-        node_names = sorted([node1.get_name(), node2.get_name()])
-        self.edge_name = "_".join(node_names)
+        self.edge_name = Edge.create_edge_name(node1.get_name(), node2.get_name())
 
     ###
     # get_name(self)
@@ -20,6 +19,18 @@ class Edge:
     def get_name(self):
         return self.edge_name
     
+
+    ###
+    # create_edge_name(node1_name, node2_name)
+    # Returns a unique name identifies for the edge using node1_name and node2_name
+    ###
+    @staticmethod
+    def create_edge_name(node1_name, node2_name):
+        node_names = sorted([node1_name, node2_name])
+        edge_name = "_".join(node_names)
+        return edge_name
+        
+
     ###
     # get_nodes()
     # Returns the edge nodes objects as a dictionary "node_name": Node Object
