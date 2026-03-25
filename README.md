@@ -1,1 +1,1 @@
-A selection of vertex cover algorithm implementations applied to several graphs to compare performance
+A selection of exact and approximation vertex cover algorithms implementated in python
