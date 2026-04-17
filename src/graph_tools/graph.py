@@ -162,11 +162,21 @@ class Graph:
     
     ###
     # is_edge_in_graph(node1_name, node2_name)
-    # 
+    # Returns True if edge is in graph, False otherwise
     ###
     def is_edge_in_graph(self, node1_name, node2_name):
         edge_name = Edge.create_edge_name(node1_name, node2_name)
         return any(edge.get_name() == edge_name for edge in self.edges)
+
+    ###
+    # get_first_edge()
+    # Returns the first edge in the graph's list of edges
+    ###
+    def get_first_edge(self):
+        if len(self.edges) == 0:
+            raise Exception("Graph does not have any edges but one is being asked for.")
+        return self.edges[0]
+
 
 
     #####################
