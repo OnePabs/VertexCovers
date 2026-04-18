@@ -5,6 +5,7 @@ from algorithms.approximations.maximal_matching import maximal_matching_search
 from algorithms.approximations.pitt_randomized import pitt_randomized_search
 from algorithms.approximations.relaxed_lp import relaxed_lp_search
 from algorithms.parameterized.basic_branching import basic_branching_search
+from algorithms.parameterized.neighbor_branching import neighbor_branching_search
 from pathlib import Path
 
 
@@ -14,8 +15,8 @@ current_script_dir = Path(__file__).parent
 # nodes_csv_path = current_script_dir / '..' / 'data' / 'star' / '4_star' / 'nodes.csv'
 # edges_csv_path = current_script_dir / '..' / 'data' / 'star' / '4_star' / 'edges.csv'
 
-nodes_csv_path = current_script_dir / '..' / 'data' / 'circular' / '4_circular' / 'nodes.csv'
-edges_csv_path = current_script_dir / '..' / 'data' / 'circular' / '4_circular' / 'edges.csv'
+nodes_csv_path = current_script_dir / '..' / 'data' / 'circular' / '5_circular' / 'nodes.csv'
+edges_csv_path = current_script_dir / '..' / 'data' / 'circular' / '5_circular' / 'edges.csv'
 
 
 
@@ -70,14 +71,24 @@ g.print_structure()
 print()
 print("--- PARAMETERIZED ---")
 
-# basic branching 
-k = 1
-res = basic_branching_search(g,k)
+# # basic branching 
+# k = 1
+# res = basic_branching_search(g,k)
+# is_cover = res[0]
+# cover = res[1]
+# print('Result of Basic Branching Search: ')
+# print('Is there a cover of size k=' +str(k)+': ' + str(is_cover))
+# print('Cover: ' + str(cover))
+# print()
+
+
+# Neighbor branching 
+k = 2
+res = neighbor_branching_search(g,k)
 is_cover = res[0]
 cover = res[1]
-print('Result of Basic Branching Search: ')
+print('Result of Neighbor Branching Search: ')
 print('Is there a cover of size k=' +str(k)+': ' + str(is_cover))
 print('Cover: ' + str(cover))
 print()
-
 

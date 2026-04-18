@@ -4,8 +4,8 @@ import copy
 # basic_branching_search(graph)
 # Returns an exact solution to the parameterized problem
 # Brnaches on the nodes of an edge (one branch for each of the two nodes)
-# returns a tuple where the first element is the size of the cover
-# and the second element is a list of nodes that cover the graph
+# returns whether there is a cover of size k
+# and the second element is a list of nodes that cover the graph or None
 ###
 def basic_branching_search(graph,k):
     print("k="  +str(k))
