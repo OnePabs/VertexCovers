@@ -1,11 +1,17 @@
 from graph_tools.graph import Graph
 from graph_tools.graph_loader import load_graph
+
+from graph_tools.approx_graph import ApproxGraph
+from graph_tools.approx_graph_loader import approx_load_graph
+
 from algorithms.exact_solutions.exhaustive import exhaustive_search
 from algorithms.approximations.maximal_matching import maximal_matching_search
 from algorithms.approximations.pitt_randomized import pitt_randomized_search
 from algorithms.approximations.relaxed_lp import relaxed_lp_search
+
 from algorithms.parameterized.basic_branching import basic_branching_search
 from algorithms.parameterized.neighbor_branching import neighbor_branching_search
+
 from pathlib import Path
 
 
@@ -20,9 +26,14 @@ edges_csv_path = current_script_dir / '..' / 'data' / 'circular' / '5_circular' 
 
 
 
+
+
+################################
+### Approximation Algorithms ###
+################################
+
 # Load the Graph
-g = load_graph(nodes_csv_path, edges_csv_path)
-g.print_structure()
+g = approx_load_graph(nodes_csv_path, edges_csv_path)
 
 # # Exhaustive search
 # all_res = exhaustive_search(g)
@@ -33,15 +44,15 @@ g.print_structure()
 # print(all_res)
 # print()
 
-# # Maximal Matching approximation
-# res = maximal_matching_search(g)
-# cover_size = res[0]
-# cover = res[1]
-# print('Result of Maximal Matching: ')
-# print('Vertex Cover Size: ' + str(cover_size))
-# print('Cover: ')
-# print(cover)
-# print()
+# Maximal Matching approximation
+res = maximal_matching_search(g)
+cover_size = res[0]
+cover = res[1]
+print('Result of Maximal Matching: ')
+print('Vertex Cover Size: ' + str(cover_size))
+print('Cover: ')
+print(cover)
+print()
 
 # # Pitt's Randomized approximation
 # res = pitt_randomized_search(g)
@@ -68,27 +79,31 @@ g.print_structure()
 #### Parameterized algorithms ####
 ##################################
 
-print()
-print("--- PARAMETERIZED ---")
+# # Load the Graph
+# g = load_graph(nodes_csv_path, edges_csv_path)
+# g.print_structure()
 
-# # basic branching 
-# k = 1
-# res = basic_branching_search(g,k)
+# print()
+# print("--- PARAMETERIZED ---")
+
+# # # basic branching 
+# # k = 1
+# # res = basic_branching_search(g,k)
+# # is_cover = res[0]
+# # cover = res[1]
+# # print('Result of Basic Branching Search: ')
+# # print('Is there a cover of size k=' +str(k)+': ' + str(is_cover))
+# # print('Cover: ' + str(cover))
+# # print()
+
+
+# # Neighbor branching 
+# k = 2
+# res = neighbor_branching_search(g,k)
 # is_cover = res[0]
 # cover = res[1]
-# print('Result of Basic Branching Search: ')
+# print('Result of Neighbor Branching Search: ')
 # print('Is there a cover of size k=' +str(k)+': ' + str(is_cover))
 # print('Cover: ' + str(cover))
 # print()
-
-
-# Neighbor branching 
-k = 2
-res = neighbor_branching_search(g,k)
-is_cover = res[0]
-cover = res[1]
-print('Result of Neighbor Branching Search: ')
-print('Is there a cover of size k=' +str(k)+': ' + str(is_cover))
-print('Cover: ' + str(cover))
-print()
 
