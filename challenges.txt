@@ -1,0 +1,8 @@
+Approximation algs (general)
+Python data structure handling is the leading contributor of runtime and RAM usage 
+Implementation of a immutable data structure with minimum overhead to store the graph
+
+LP Relaxation
+Bn-human 15M edges means 15M constraints
+Way too many constraints, program never finishes and runs out of RAM
+Change to constraint generation and go from PulP to Gurobi
