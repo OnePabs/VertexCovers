@@ -40,5 +40,15 @@ class ApproxGraph:
     ####
     def get_nodes_from_indices(self, indices):
         return self.node_names_df.iloc[indices]
+
+
+
+    ####
+    #
+    #
+    ####
+    def get_node_names_iterator(self):
+        return self.node_names_df.itertuples(index=False)
+
     
         

@@ -18,11 +18,12 @@ from pathlib import Path
 
 # Construct the path to the graph data file
 current_script_dir = Path(__file__).parent
-# nodes_csv_path = current_script_dir / '..' / 'data' / 'star' / '4_star' / 'nodes.csv'
-# edges_csv_path = current_script_dir / '..' / 'data' / 'star' / '4_star' / 'edges.csv'
 
-nodes_csv_path = current_script_dir / '..' / 'data' / 'circular' / '5_circular' / 'nodes.csv'
-edges_csv_path = current_script_dir / '..' / 'data' / 'circular' / '5_circular' / 'edges.csv'
+nodes_csv_path = current_script_dir / '..' / 'data' / 'star' / '4_star' / 'nodes.csv'
+edges_csv_path = current_script_dir / '..' / 'data' / 'star' / '4_star' / 'edges.csv'
+
+# nodes_csv_path = current_script_dir / '..' / 'data' / 'circular' / '5_circular' / 'nodes.csv'
+# edges_csv_path = current_script_dir / '..' / 'data' / 'circular' / '5_circular' / 'edges.csv'
 
 
 
@@ -54,25 +55,25 @@ g = approx_load_graph(nodes_csv_path, edges_csv_path)
 # print(cover)
 # print()
 
-# Pitt's Randomized approximation
-res = pitt_randomized_search(g)
-cover_size = res[0]
-cover = res[1]
-print('Result of Pitt\'s Ranommized Search: ')
-print('Vertex Cover Size: ' + str(cover_size))
-print('Cover: ')
-print(cover)
-print()
-
-# #Relaxed LP approximation
-# res = relaxed_lp_search(g)
+# # Pitt's Randomized approximation
+# res = pitt_randomized_search(g)
 # cover_size = res[0]
 # cover = res[1]
-# print('Result of Relaxed LP Search: ')
+# print('Result of Pitt\'s Ranommized Search: ')
 # print('Vertex Cover Size: ' + str(cover_size))
 # print('Cover: ')
 # print(cover)
 # print()
+
+#Relaxed LP approximation
+res = relaxed_lp_search(g)
+cover_size = res[0]
+cover = res[1]
+print('Result of Relaxed LP Search: ')
+print('Vertex Cover Size: ' + str(cover_size))
+print('Cover: ')
+print(cover)
+print()
 
 
 ##################################
