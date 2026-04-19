@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 ###
 # pitt_randomized_search(graph)
@@ -9,12 +10,23 @@ import random
 ###
 def pitt_randomized_search(graph, seed = 0):
     random.seed(seed) 
-    cover = set()
-    for edge in graph.get_edges():
-        if not any(edge_node_name in cover for edge_node_name in edge.get_node_names()):
-            choices = list(edge.get_node_names())
+    matched = np.array([False]*graph.num_nodes)
+
+    # Go through each edge. If it not already covered add a random edge node to the cover
+    for edge in graph.get_edges_iterator():
+        node1_id = graph.nodes_ids[edge[0]]
+        node2_id = graph.nodes_ids[edge[1]]
+        if not matched[node1_id] and not matched[node2_id]:
+            choices = [node1_id,node2_id]
             choice = random.choice(choices)
-            cover.add(choice)
-    size = len(cover)
+            matched[choice] = True
+    
+    # Get the indices of the vertices that are included in the matching
+    indices = np.where(matched)[0]
+    #Get the size of the cover
+    size = len(indices)
+    # Get the cover
+    cover = graph.get_nodes_from_indices(indices)
     return (size, cover)
+
 

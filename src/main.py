@@ -44,25 +44,25 @@ g = approx_load_graph(nodes_csv_path, edges_csv_path)
 # print(all_res)
 # print()
 
-# Maximal Matching approximation
-res = maximal_matching_search(g)
-cover_size = res[0]
-cover = res[1]
-print('Result of Maximal Matching: ')
-print('Vertex Cover Size: ' + str(cover_size))
-print('Cover: ')
-print(cover)
-print()
-
-# # Pitt's Randomized approximation
-# res = pitt_randomized_search(g)
+# # Maximal Matching approximation
+# res = maximal_matching_search(g)
 # cover_size = res[0]
 # cover = res[1]
-# print('Result of Pitt\'s Ranommized Search: ')
+# print('Result of Maximal Matching: ')
 # print('Vertex Cover Size: ' + str(cover_size))
 # print('Cover: ')
 # print(cover)
 # print()
+
+# Pitt's Randomized approximation
+res = pitt_randomized_search(g)
+cover_size = res[0]
+cover = res[1]
+print('Result of Pitt\'s Ranommized Search: ')
+print('Vertex Cover Size: ' + str(cover_size))
+print('Cover: ')
+print(cover)
+print()
 
 # #Relaxed LP approximation
 # res = relaxed_lp_search(g)
