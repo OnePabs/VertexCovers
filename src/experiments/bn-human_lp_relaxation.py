@@ -21,8 +21,8 @@ print('Start experiment ' + dataset_name + ' ' + algorithm_name)
 src_dir = Path(__file__).parent.parent.parent
 current_script_dir = Path(__file__).parent
 
-nodes_csv_path = src_dir / 'data' / 'bn-human' / 'nodes.csv'
-edges_csv_path = src_dir / 'data' / 'bn-human' / 'edges.csv'
+nodes_csv_path = src_dir / 'data' / dataset_name / 'nodes.csv'
+edges_csv_path = src_dir / 'data' / dataset_name / 'edges.csv'
 
 # Load the Graph
 g = approx_load_graph(nodes_csv_path, edges_csv_path)
