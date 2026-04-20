@@ -66,7 +66,7 @@ g = approx_load_graph(nodes_csv_path, edges_csv_path)
 # print()
 
 #Relaxed LP approximation
-res = relaxed_lp_search(g)
+res = relaxed_lp_search(g,solver = 'pulp_batching')
 cover_size = res[0]
 cover = res[1]
 print('Result of Relaxed LP Search: ')

@@ -6,3 +6,7 @@ LP Relaxation
 Bn-human 15M edges means 15M constraints
 Way too many constraints, program never finishes and runs out of RAM
 Change to constraint generation and go from PulP to Gurobi
+we have no license for Gurobi so change back to pulp 
+Added batch constraint generation 
+Most of the time spent was on finding violated constraints, so only looked for at most batch size constraints 
+
