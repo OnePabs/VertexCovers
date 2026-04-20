@@ -10,7 +10,12 @@ from graph_tools.approx_graph_loader import approx_load_graph
 from pathlib import Path
 import time
 
-print('bn-human LP Relaxation Experiment')
+# Name of Dataset and Algorithm
+# Used for results filenames creation
+dataset_name = 'bn-human'
+algorithm_name = 'pulp_batching'
+
+print('Start experiment ' + dataset_name + ' ' + algorithm_name)
 
 # Construct the path to the graph data file
 src_dir = Path(__file__).parent.parent.parent
@@ -35,17 +40,22 @@ cover = res[1]
 print('LP Relaxation Vertex Cover Size: ' + str(cover_size))
 
 
-results_size_path = current_script_dir / 'results' / 'bn-human_lp_relaxation_result_size.csv'
+results_size_filename = dataset_name + '_' + algorithm_name + '_' + 'vc-size.csv'
+results_size_path = current_script_dir / 'results' / results_size_filename
 with open(results_size_path, "w") as file:
     file.write("cover_size\n")
     file.write(str(cover_size))
 
-results_cover_path = current_script_dir / 'results' / 'bn-human_lp_relaxation_result_cover.csv'
+
+results_cover_filename = dataset_name + '_' + algorithm_name + '_' + 'cover.csv'
+results_cover_path = current_script_dir / 'results' / results_cover_filename
 cover.to_csv(results_cover_path, index=False)
 
-time_path = current_script_dir / 'results' / 'bn-human_lp_relaxation_runtime.txt'
+
+results_runtime_filename =  dataset_name + '_' + algorithm_name + '_' + 'runtime.txt'
+time_path = current_script_dir / 'results' / results_runtime_filename
 with open(time_path, "w") as file:
     file.write("runtime\n")
     file.write(str(running_time))
 
-print('bn-human LP Relaxation experiment over')
+print('End experiment ' + dataset_name + ' ' + algorithm_name)

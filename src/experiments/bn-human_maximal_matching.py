@@ -11,6 +11,12 @@ from pathlib import Path
 import time
 
 
+# Name of Dataset and Algorithm
+# Used for results filenames creation
+dataset_name = 'bn-human'
+algorithm_name = 'maximal_matching'
+
+print('Start experiment ' + dataset_name + ' ' + algorithm_name)
 
 
 # Construct the path to the graph data file
@@ -24,28 +30,37 @@ edges_csv_path = src_dir / 'data' / 'bn-human' / 'edges.csv'
 # Load the Graph
 g = approx_load_graph(nodes_csv_path, edges_csv_path)
 
-# Maximal Matching approximation
+# Perform algorithm Maximal Matching approximation
 start_time = time.perf_counter()
 res = maximal_matching_search(g)
 end_time = time.perf_counter()
 running_time = end_time - start_time
-print("Running time: " + str(running_time))
+print("Run time: " + str(running_time))
 
+# Get results into variables
 cover_size = res[0]
 cover = res[1]
 print('Maximal Matching Vertex Cover Size: ' + str(cover_size))
 
-
-results_size_path = current_script_dir / 'results' / 'bn-human_maximal_matching_result_size.csv'
+# write size
+results_size_filename = dataset_name + '_' + algorithm_name + '_' + 'vc-size.csv'
+results_size_path = current_script_dir / 'results' / results_size_filename
 with open(results_size_path, "w") as file:
     file.write("cover_size\n")
     file.write(str(cover_size))
 
-results_cover_path = current_script_dir / 'results' / 'bn-human_maximal_matching_result_cover.csv'
+
+# write cover
+results_cover_filename = dataset_name + '_' + algorithm_name + '_' + 'cover.csv'
+results_cover_path = current_script_dir / 'results' / results_cover_filename
 cover.to_csv(results_cover_path, index=False)
 
-time_path = current_script_dir / 'results' / 'bn-human_maximal_matching_runtime.txt'
+
+# write runtime
+results_runtime_filename =  dataset_name + '_' + algorithm_name + '_' + 'runtime.txt'
+time_path = current_script_dir / 'results' / results_runtime_filename
 with open(time_path, "w") as file:
     file.write("runtime\n")
     file.write(str(running_time))
 
+print('End experiment ' + dataset_name + ' ' + algorithm_name)
