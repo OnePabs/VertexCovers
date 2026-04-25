@@ -138,7 +138,7 @@ def relaxed_lp_search_pulp(graph, batch_size=500000,  max_mem_gb=4):
     print('objective set in runtime '  + str(running_time) + ' seconds' )
 
     # Add constraints from edges in maximal matching
-    print('Adding Maximal Matching constraints...')
+    print('Adding constraints...')
     for edge in graph.get_edges_iterator():
         node1_name = edge[0]
         node2_name = edge[1]
@@ -148,7 +148,7 @@ def relaxed_lp_search_pulp(graph, batch_size=500000,  max_mem_gb=4):
     print('Added constraints in runtime '  + str(running_time) + ' seconds' )
 
     # solve model
-    print('solving model using maximal matching constraints...')
+    print('solving model...')
     solver = pulp.PULP_CBC_CMD(msg=False)
     start_time = time.perf_counter()
     model.solve(solver)
