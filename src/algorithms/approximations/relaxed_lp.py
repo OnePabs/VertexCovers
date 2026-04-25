@@ -6,19 +6,6 @@ from ..limit_resources import kill_if_max_memory_exceeded
 import os
 
 
-###
-# relaxed_lp_search(graph)
-# Returns a 2-approximation minimum cover using constraint generation
-# Uses linear programming relaxation method.
-# returns a tuple where the first element is the size of the cover
-# and the second element is a list of nodes that cover the graph
-###
-def relaxed_lp_search(graph, batch_size=500000, solver = 'pulp_batching', max_iter=100, max_mem_gb=4):
-    # if solver == 'gurobi':
-    #     return relaxed_lp_search_gurobi(graph, batch_size)
-    if solver == 'pulp_batching':
-        return relaxed_lp_search_pulp_batching(graph, batch_size, max_iter, max_mem_gb)
-
 
 #################################
 #### Gurobipy Implementation ####
@@ -127,6 +114,60 @@ def relaxed_lp_search(graph, batch_size=500000, solver = 'pulp_batching', max_it
 
 import pulp
 
+def relaxed_lp_search_pulp(graph, batch_size=500000,  max_mem_gb=4):
+    print('Relaxed LP Search with PuLP')
+
+    # create new model
+    model = pulp.LpProblem("MyModel", pulp.LpMinimize)
+    
+    # Variables
+    print('Setting variables ...')
+    var_name_prefix = "node_name"
+    start_time = time.perf_counter()
+    x = pulp.LpVariable.dicts(var_name_prefix, graph.node_names_df["nodes"], lowBound=0, upBound=1, cat='Continuous')
+    end_time = time.perf_counter()
+    running_time = end_time - start_time
+    print('variables set in runtime ' + str(running_time) + ' seconds')
+
+    # Objective
+    print('Setting objective ...')
+    start_time = time.perf_counter()
+    model += pulp.lpSum(x.values()), "Total_Sum_Objective"
+    end_time = time.perf_counter()
+    running_time = end_time - start_time
+    print('objective set in runtime '  + str(running_time) + ' seconds' )
+
+    # Add constraints from edges in maximal matching
+    print('Adding Maximal Matching constraints...')
+    for edge in graph.get_edges_iterator():
+        node1_name = edge[0]
+        node2_name = edge[1]
+        model += x[node1_name] + x[node2_name] >= 1
+    end_time = time.perf_counter()
+    running_time = end_time - start_time
+    print('Added constraints in runtime '  + str(running_time) + ' seconds' )
+
+    # solve model
+    print('solving model using maximal matching constraints...')
+    solver = pulp.PULP_CBC_CMD(msg=False)
+    start_time = time.perf_counter()
+    model.solve(solver)
+    end_time = time.perf_counter()
+    running_time = end_time - start_time
+    print('Model solved in '  + str(running_time) + ' seconds')
+
+    # Get the list of nodes that lead to the optimized value
+    cover = [v.name[len(var_name_prefix)+1:] for v in model.variables() if v.varValue >= 0.5]
+    cover_df = pd.DataFrame(cover, columns=['nodes'])
+    size = len(cover)
+
+    print('Finished Relaxed LP Search with PuLP')
+    return (size,cover_df)
+
+
+
+
+
 ###
 # relaxed_lp_search(graph)
 # Returns a 2-approximation minimum cover
@@ -146,7 +187,7 @@ def relaxed_lp_search_pulp_batching(graph, batch_size=500000,  max_iter=100, max
     print('Setting variables ...')
     var_name_prefix = "node_name"
     start_time = time.perf_counter()
-    x = pulp.LpVariable.dicts(var_name_prefix, graph.node_names_df["nodes"], lowBound=0, upBound=100, cat='Continuous')
+    x = pulp.LpVariable.dicts(var_name_prefix, graph.node_names_df["nodes"], lowBound=0, upBound=1, cat='Continuous')
     end_time = time.perf_counter()
     running_time = end_time - start_time
     print('variables set in runtime ' + str(running_time) + ' seconds')
@@ -159,9 +200,7 @@ def relaxed_lp_search_pulp_batching(graph, batch_size=500000,  max_iter=100, max
     running_time = end_time - start_time
     print('objective set in runtime '  + str(running_time) + ' seconds' )
 
-    #### Use Maximal Matching for warm start
-    #### (otherwise too slow)
-    #### Looped Constraint generation does not work in Pulp because the model gets rebuilt at every iteration
+    # Use Maximal Matching for warm start
 
     # Get a maximal matching
     print('Getting Maximal Matching ...')
