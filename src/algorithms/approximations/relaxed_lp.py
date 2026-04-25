@@ -3,6 +3,7 @@ import pandas as pd
 import random
 import time
 from ..limit_resources import kill_if_max_memory_exceeded
+from ..limit_resources import get_mem_left_gb
 import os
 
 
@@ -116,6 +117,7 @@ import pulp
 
 def relaxed_lp_search_pulp(graph, batch_size=500000,  max_mem_gb=4):
     print('Relaxed LP Search with PuLP')
+    pid = os.getpid()
 
     # create new model
     model = pulp.LpProblem("MyModel", pulp.LpMinimize)
@@ -139,7 +141,14 @@ def relaxed_lp_search_pulp(graph, batch_size=500000,  max_mem_gb=4):
 
     # Add constraints from edges in maximal matching
     print('Adding constraints...')
+    batch_itr = 0
     for edge in graph.get_edges_iterator():
+        batch_itr = batch_itr + 1
+        if batch_itr >= batch_size:
+            # Check amount of memory used
+            # Kill current process if it exceeds max memory limits
+            kill_if_max_memory_exceeded(pid,max_mem_gb)
+            batch_itr = 0
         node1_name = edge[0]
         node2_name = edge[1]
         model += x[node1_name] + x[node2_name] >= 1
@@ -147,9 +156,13 @@ def relaxed_lp_search_pulp(graph, batch_size=500000,  max_mem_gb=4):
     running_time = end_time - start_time
     print('Added constraints in runtime '  + str(running_time) + ' seconds' )
 
+    # Check amount of memory left
+    kill_if_max_memory_exceeded(pid,max_mem_gb)
+    mem_left = get_mem_left_gb(pid,max_mem_gb)
+
     # solve model
     print('solving model...')
-    solver = pulp.PULP_CBC_CMD(msg=False)
+    solver = pulp.PULP_CBC_CMD(maxMemory=mem_left*1024, msg=False)
     start_time = time.perf_counter()
     model.solve(solver)
     end_time = time.perf_counter()
