@@ -11,3 +11,10 @@ def kill_if_max_memory_exceeded(pid,max_mem_gb):
         print(f"Memory exceeded: {rss / (1024**3):.2f} GiB")
         os.kill(os.getpid(), signal.SIGKILL)
 
+
+
+def get_mem_left_gb(pid,max_mem_gb):
+    limit = int(max_mem_gb * 1024**3)  
+    proc = psutil.Process(pid)
+    rss = proc.memory_info().rss
+    return (limit - rss)/(1024**3)
