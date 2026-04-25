@@ -158,11 +158,12 @@ def relaxed_lp_search_pulp(graph, batch_size=500000,  max_mem_gb=4):
 
     # Check amount of memory left
     kill_if_max_memory_exceeded(pid,max_mem_gb)
-    mem_left = get_mem_left_gb(pid,max_mem_gb)
+    # mem_left = get_mem_left_gb(pid,max_mem_gb)
 
     # solve model
+    # CBC DOES NOT have a memory check fla :(  
     print('solving model...')
-    solver = pulp.PULP_CBC_CMD(maxMemory=mem_left*1024, msg=False)
+    solver = pulp.PULP_CBC_CMD(msg=False)
     start_time = time.perf_counter()
     model.solve(solver)
     end_time = time.perf_counter()
