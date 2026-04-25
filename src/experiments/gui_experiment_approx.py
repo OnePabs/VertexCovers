@@ -19,8 +19,10 @@ def submit_form():
     data_folder_path = data_folder_path_entry.get()
     results_folder_path = results_folder_path_entry.get()
     algorithm_name = algorithm_name_entry.get()
-    if data_folder_path and results_folder_path and algorithm_name:
-        general_experiment_approx(data_folder_path,results_folder_path,algorithm_name)
+    batch_size = int(batch_size_entry.get())
+    max_mem_gb = int(max_mem_gb_entry.get())
+    if data_folder_path and results_folder_path and algorithm_name and batch_size and max_mem_gb:
+        general_experiment_approx(data_folder_path,results_folder_path,algorithm_name, batch_size, max_mem_gb)
         messagebox.showinfo("Success", "End")
 
         # GUI delete data in user entry boxes
@@ -42,6 +44,14 @@ results_folder_path_entry.pack()
 tk.Label(root, text="algorithm:").pack(pady=(10,0))
 algorithm_name_entry = tk.Entry(root)
 algorithm_name_entry.pack()
+
+tk.Label(root, text="batch_size (int):").pack(pady=(10,0))
+batch_size_entry = tk.Entry(root)
+batch_size_entry.pack()
+
+tk.Label(root, text="max memory usage (int GB):").pack(pady=(10,0))
+max_mem_gb_entry = tk.Entry(root)
+max_mem_gb_entry.pack()
 
 # Submit Button
 tk.Button(root, text="Submit", command=submit_form).pack(pady=20)

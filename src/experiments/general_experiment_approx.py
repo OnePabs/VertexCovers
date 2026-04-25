@@ -6,7 +6,7 @@ from pathlib import Path
 import time
 
 
-def general_experiment_approx(data_folder_path, results_folder_path, algorithm_name):
+def general_experiment_approx(data_folder_path, results_folder_path, algorithm_name, batch_size, max_mem_gb):
 
     # Construct the path to the graph data files and result files (first done in case of errors)
     data_folder_path = Path(data_folder_path)
@@ -33,15 +33,15 @@ def general_experiment_approx(data_folder_path, results_folder_path, algorithm_n
 
     # Run algorithm on graph
     start_time = time.perf_counter()
-    res = alg(g)
+    res = alg(g, batch_size=batch_size, max_mem_gb=max_mem_gb)
     end_time = time.perf_counter()
     running_time = end_time - start_time
-    print("Total LP Relaxation search runtime: " + str(running_time))
+    print("Total Algorithm search runtime: " + str(running_time))
 
     # Store cover and cover size in internal variables
     cover_size = res[0]
     cover = res[1]
-    print('LP Relaxation Vertex Cover Size: ' + str(cover_size))
+    print('Algorithm Cover Size: ' + str(cover_size))
 
     # Write results to files
     with open(res_vc_size_filepath, "w") as file:
@@ -55,3 +55,4 @@ def general_experiment_approx(data_folder_path, results_folder_path, algorithm_n
         file.write(str(running_time))
 
     return
+
