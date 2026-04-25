@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import random
 import time
 from ..limit_resources import kill_if_max_memory_exceeded
@@ -12,7 +13,7 @@ import os
 # returns a tuple where the first element is the size of the cover
 # and the second element is a list of nodes that cover the graph
 ###
-def relaxed_lp_search(graph, batch_size=500000, solver = 'pulp_batching', max_iter=100, max_mem_gb=0.5):
+def relaxed_lp_search(graph, batch_size=500000, solver = 'pulp_batching', max_iter=100, max_mem_gb=4):
     # if solver == 'gurobi':
     #     return relaxed_lp_search_gurobi(graph, batch_size)
     if solver == 'pulp_batching':
@@ -138,7 +139,7 @@ import pulp
 # returns a tuple where the first element is the size of the cover
 # and the second element is a list of nodes that cover the graph
 ###
-def relaxed_lp_search_pulp_batching(graph, batch_size=500000,  max_iter=100, max_mem_gb=0.5):
+def relaxed_lp_search_pulp_batching(graph, batch_size=500000,  max_iter=100, max_mem_gb=4):
     model = pulp.LpProblem("MyModel", pulp.LpMinimize)
     
     # Variables
@@ -274,8 +275,9 @@ def relaxed_lp_search_pulp_batching(graph, batch_size=500000,  max_iter=100, max
     
     # Get the list of nodes that lead to the optimized value
     cover = [v.name[len(var_name_prefix)+1:] for v in model.variables() if v.varValue >= 0.5]
+    cover_df = pd.DataFrame(cover, columns=['nodes'])
     size = len(cover)
 
-    return (size,cover)
+    return (size,cover_df)
 
 
