@@ -22,6 +22,10 @@ def submit_form():
     batch_size = int(batch_size_entry.get())
     max_mem_gb = int(max_mem_gb_entry.get())
     if data_folder_path and results_folder_path and algorithm_name and batch_size and max_mem_gb:
+        if data_folder_path.startswith('\''):
+            data_folder_path = data_folder_path[1:-1] # removes first AND last symbol
+        if results_folder_path.startswith('\''):
+            results_folder_path = results_folder_path[1:-1]
         general_experiment_approx(data_folder_path,results_folder_path,algorithm_name, batch_size, max_mem_gb)
         messagebox.showinfo("Success", "End")
 
