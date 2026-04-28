@@ -1,6 +1,7 @@
 from algorithms.approximations.maximal_matching import maximal_matching_search
 from algorithms.approximations.pitt_randomized import pitt_randomized_search
-from algorithms.approximations.relaxed_lp import relaxed_lp_search_pulp, relaxed_lp_search_pulp_batching
+from algorithms.approximations.relaxed_lp import relaxed_lp_search_pulp
+from algorithms.approximations.MMRRLPb import mmrrlpb_search
 from graph_tools.approx_graph_loader import approx_load_graph
 from pathlib import Path
 import time
@@ -28,8 +29,8 @@ def general_experiment_approx(data_folder_path, results_folder_path, algorithm_n
         alg = pitt_randomized_search
     elif algorithm_name == "relaxed_lp":
         alg = relaxed_lp_search_pulp
-    elif algorithm_name == "relaxed_lp_batching":
-         alg = relaxed_lp_search_pulp_batching
+    elif algorithm_name == "mmrrlpb":
+         alg = mmrrlpb_search
     else:
         raise Exception("Algorithm Name NOT FOUND")
 
