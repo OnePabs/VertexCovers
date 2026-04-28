@@ -10,3 +10,8 @@ we have no license for Gurobi so change back to pulp
 Added batch constraint generation 
 Most of the time spent was on finding violated constraints, so only looked for at most batch size constraints 
 
+
+
+bn-human
+edges in maximal matching: 35150
+nodes in maximal matching: 70300 
