@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import pulp
-
 import random
 import time
 from ..limit_resources import kill_if_max_memory_exceeded
@@ -117,6 +116,8 @@ def mmrrlpb_search(graph, batch_size=500000,  max_mem_gb=4):
                     model += x[node2_name] == 1
                     potential_cover_names.add(node2_name)   # add node name to potential cover so that further violated edges with the same node do not get processed and add the constraint again
                 is_violated = True
+                if num_node_names_added_as_constraints >= batch_size: # ensure only up to batch_size number of nodes are added as constraints. 
+                    break
                 num_node_names_added_as_constraints += 1
         if is_violated:
             print("Number of nodes added as constraints: " + str(num_node_names_added_as_constraints))
