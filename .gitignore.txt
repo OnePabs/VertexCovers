@@ -1,2 +1,3 @@
 /data/
 /src/experiments/results/
+*.pyc
