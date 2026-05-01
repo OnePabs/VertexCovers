@@ -14,17 +14,17 @@ Each graph should be stored in its own folder with two files
 1. create a folder (example name 3_node_circular_graph)
 2. In the folder "3_node_circular_graph" create a file called "nodes.csv". The content of the file must be
 
-nodes
-1
-2
-3
+nodes <br>
+1 <br>
+2 <br>
+3 <br>
 
 3. In the folder "3_node_circular_graph" create a file called "edges.csv". The content of the file must be
 
-node1,node2
-1,2
-2,3
-3,1
+node1,node2 <br>
+1,2 <br>
+2,3 <br>
+3,1 <br>
 
 
 
@@ -38,25 +38,27 @@ Each experiment has at the top of the file an explanation on how to run it. It u
 
 Open a terminal at VertexCovers
 cd to src folder
-typethe command: python3 -m experiments.name_of_experiment_file_without_extension
+type the command: python3 -m experiments.name_of_experiment_file_without_extension
 
 Depending on the environment you are running the project on the above command might slightly change (like python instead of python3)
 
+### THE EXPERIMENT MOST USED IS: gui_experiment_approx.py
+This experiment creates a graphical interface where you can enter the path to your data,
+the path to the folder where the results will be stored, and the name of the approximation
+algorith to be used. Possible algorithm names are maximal_matching, pitt, relaxed_lp, and mmrrlpb.
+
+### Your env must have Python 3.*, Numpy, Pandas, PuLP
 
 # Results
 
-Results are stored under the folder
+Each experiment outputs 3 files: <br>
 
-VertexCovers/src/experiments/results
+name_of_experiment_vc-size.csv <br>
+name_of_experiment_cover.csv <br>
+name_of_experiment_runtime.txt <br>
 
-Each experiment outputs 3 files 
-
-name_of_experiment_vc-size.csv 
-name_of_experiment_cover.csv
-name_of_experiment_runtime.txt
-
-The file ending with vc-size.csv contains the size of the vertex cover found by the algorithm on the dataset specified. 
-The file ending with cover.csv contains a single column of nodes that make up the vertex cover
+The file ending with vc-size.csv contains the size of the vertex cover found by the algorithm on the dataset specified. <br>
+The file ending with cover.csv contains a single column of nodes that make up the vertex cover. <br>
 The file ending with runtime.txt contains the time in seconds taken for the algorithm to complete. 
 
 ### Parameterized Algorithms Results
